@@ -1,1 +1,1 @@
-{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/yura/VagProjects/VagProject1","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/yura/VagProjects/VagProject1","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}},"virtualbox":{"/home/vagrant/www-content":{"type":"virtualbox","guestpath":"/home/vagrant/www-content","hostpath":"/home/yura/VagProjects/VagProject1","disabled":false,"__vagrantfile":true}}}

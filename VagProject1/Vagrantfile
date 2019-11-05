@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
   config.vm.box_version = "1905.1"
   config.vm.provision "shell", path: "script.sh"
+  config.vm.synced_folder "./","/home/vagrant/www-content",type:"virtualbox"
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
