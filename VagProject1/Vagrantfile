@@ -12,11 +12,41 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-
-  config.vm.box = "centos/7"
-  config.vm.box_version = "1905.1"
-  config.vm.provision "shell", path: "script.sh"
-  config.vm.synced_folder "./","/home/vagrant/www-content",type:"virtualbox"
+  config.vm.define "nginx-server" do |vm1|
+    vm1.vm.hostname = "nginx-server"
+    vm1.vm.box = "centos/7"
+    vm1.vm.box_version = "1905.1"
+    vm1.vm.network "private_network", ip: "192.168.33.10"
+    vm1.vm.network "forwarded_port", guest: 80, host: 8080
+    vm1.vm.provision "shell", path: "./nginx.sh"
+    vm1.vm.synced_folder "./nginx_share","/home/vagrant/www-content",type:"virtualbox"
+    vm1.vm.provider "virtualbox" do |vb|
+      vb.name = "nginx-server"
+      vb.gui = false
+      vb.memory = 1024
+    end	
+  end
+  config.vm.define "ubuntu" do |vm2|
+    vm2.vm.hostname = "ubuntu"
+    vm2.vm.box = "generic/ubuntu1804"
+    vm2.vm.network "private_network", ip: "192.168.33.20"
+    vm2.vm.provision "shell", path: "./mount.sh"
+    vm2.vm.synced_folder "./ubuntu_share","/home/vagrant/www-content",type:"virtualbox"
+    vm2.vm.provider "virtualbox" do |vb|
+      vb.name = "ubuntu"
+      vb.gui = false
+      vb.memory = 1024
+      (1..4).each do |i|
+        unless File.exist?("mydisk#{i}.vmdk")
+          if i == 1 then
+            vb.customize ['storagectl', 'ubuntu', '--name', 'mySATA Controller', '--add', 'sata', '--portcount',6]
+          end
+          vb.customize [ "createmedium", "disk", "--filename","mydisk#{i}.vmdk", "--format", "vmdk", "--size", 300 ]
+	end
+        vb.customize [ "storageattach", 'ubuntu' , "--storagectl", "mySATA Controller", "--port", "#{i}", "--device", "0", "--type", "hdd", "--medium","mydisk#{i}.vmdk"]
+      end
+    end
+  end
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
@@ -27,7 +57,6 @@ Vagrant.configure("2") do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
   # config.vm.network "forwarded_port", guest: 80, host: 8080
-
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
   # via 127.0.0.1 to disable public access
