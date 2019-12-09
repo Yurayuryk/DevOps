@@ -8,7 +8,8 @@
      yum -y update
      yum -y install epel-release
      yum -y install nginx
-     systemctl enable nginx
      systemctl start nginx
+     systemctl enable nginx
      systemctl status nginx
+     cp -f /home/vagrant/www-content/index.html /usr/share/nginx/html
      su vagrant
