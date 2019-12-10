@@ -12,6 +12,8 @@ fsuid2=$(blkid -o value -s UUID /dev/vg00/vol2)
 cd /etc
 echo "UUID=$fsuid1 /mnt/vol1 ext4 defaults 0 0" >> fstab
 echo "UUID=$fsuid2 /mnt/vol2 ext4 defaults 0 0" >> fstab
+mount -a 
+mount | grep mnt
 lsblk
 su vagrant 
 
