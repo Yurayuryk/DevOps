@@ -1,3 +1,4 @@
+
 sudo su
 pvcreate /dev/sdb /dev/sdc /dev/sdd /dev/sde
 vgcreate vg00 /dev/sdb /dev/sdc /dev/sdd /dev/sde
@@ -10,8 +11,8 @@ mkdir /mnt/vol2
 fsuid1=$(blkid -o value -s UUID /dev/vg00/vol1)
 fsuid2=$(blkid -o value -s UUID /dev/vg00/vol2)
 cd /etc
-echo "UUID=$fsuid1 /mnt/vol1 ext4 defaults 0 0" >> fstab
-echo "UUID=$fsuid2 /mnt/vol2 ext4 defaults 0 0" >> fstab
+grep /mnt/vol1 ./fstab || echo "UUID=$fsuid1 /mnt/vol1 ext4 defaults 0 0" >> fstab
+grep /mnt/vol2 ./fstab || echo "UUID=$fsuid2 /mnt/vol2 ext4 defaults 0 0" >> fstab
 mount -a 
 mount | grep mnt
 lsblk

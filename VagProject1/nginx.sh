@@ -13,3 +13,5 @@
      systemctl status nginx
      cp -f /home/vagrant/www-content/index.html /usr/share/nginx/html
      su vagrant
+     cd ~/www-content
+     ./docker.sh 
